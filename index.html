@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2b1d52">
+<title>เสื้อสีไรดีเหมียว</title>
+<meta name="description" content="แมวหมอดูบอกสีเสื้อประจำวันตามหลักทักษา เลือกวันเกิดและเรื่องที่อยากเสริม — เพื่อความบันเทิง">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #2b1d52;
+    --bg2: #46307f;
+    --card: #fffaf0;
+    --ink: #2a2140;
+    --muted: #6b5f86;
+    --gold: #ffc94d;
+    --pink: #ff8fb8;
+    --shirt: #ffc94d;
+    --accent: #ff8fb8;
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; overflow-x: hidden; }
+  html { background: var(--bg); }
+  body {
+    font-family: "Sarabun", system-ui, sans-serif;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink);
+    background: var(--bg) radial-gradient(circle at 20% 0%, var(--bg2), var(--bg) 480px) no-repeat;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(2px 2px at 10% 20%, #fff8 50%, transparent 51%),
+      radial-gradient(2px 2px at 80% 10%, #fff6 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 60% 40%, #fff7 50%, transparent 51%),
+      radial-gradient(2px 2px at 30% 70%, #fff5 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 90% 80%, #fff6 50%, transparent 51%); }
+  .wrap { position: relative; z-index: 1; max-width: 480px; margin: 0 auto;
+    padding: 12px 16px calc(24px + env(safe-area-inset-bottom)); }
+  header { display: flex; align-items: center; justify-content: space-between; color: #fff; padding: 4px 0 8px; }
+  .brand { font-family: "Mali", cursive; font-weight: 700; font-size: 22px; background: none; border: 0; color: #fff; padding: 8px 0; cursor: pointer; }
+  .today-chip { font-size: 14px; color: #e9defc; text-align: right; }
+  h1, h2, .mali { font-family: "Mali", cursive; }
+  h1 { color: #fff; font-size: 30px; text-align: center; margin: 4px 0 0; line-height: 1.3; }
+  h2 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: #e9defc; text-align: center; margin: 4px 0 12px; }
+  .card { background: var(--card); border-radius: var(--radius); padding: 18px 16px; margin: 12px 0;
+    box-shadow: 0 8px 24px #0004; }
+  .hint { color: var(--muted); font-size: 16px; margin: 0 0 12px; }
+  .screen { display: none; animation: fadeIn .35s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .btn { display: block; width: 100%; min-height: 56px; border: 0; border-radius: 16px; font: 700 20px "Mali", cursive;
+    cursor: pointer; padding: 12px 16px; transition: transform .1s; -webkit-tap-highlight-color: transparent; }
+  .btn:active { transform: scale(.97); }
+  .btn-main { background: var(--gold); color: var(--ink); box-shadow: 0 4px 0 #c9922a; }
+  .btn-ghost { background: #ffffff1f; color: #fff; border: 2px solid #ffffff55; }
+  .btn-soft { background: #efe6ff; color: var(--ink); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .opt { min-height: 64px; border: 3px solid transparent; border-radius: 16px; background: #fff; cursor: pointer;
+    font: 600 18px "Sarabun", sans-serif; color: var(--ink); padding: 8px 10px; display: flex; align-items: center; gap: 10px;
+    text-align: left; box-shadow: 0 2px 0 #0002; -webkit-tap-highlight-color: transparent; }
+  .opt:active { transform: scale(.97); }
+  .opt .dot { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #0002; }
+  .opt small { display: block; font-weight: 400; font-size: 13px; color: var(--muted); line-height: 1.3; }
+  .opt .emo { font-size: 26px; flex: none; }
+  .opt.wide { grid-column: 1 / -1; }
+
+  .rules { color: #f3edff; font-size: 16px; background: #ffffff14; border-radius: 16px; padding: 12px 14px; margin: 14px 0; }
+  .rules b { color: var(--gold); }
+  .rules ul { margin: 6px 0 0; padding-left: 20px; }
+
+  .born-chip { display: flex; align-items: center; justify-content: space-between; gap: 8px; color: #fff;
+    background: #ffffff1f; border-radius: 14px; padding: 8px 12px; margin-bottom: 4px; font-size: 16px; }
+  .link { background: none; border: 0; color: var(--gold); font: 600 16px "Sarabun"; text-decoration: underline; cursor: pointer; padding: 12px 6px; min-height: 44px; }
+
+  /* cat */
+  .stage { position: relative; display: flex; justify-content: center; margin-top: 4px; }
+  .cat { width: 220px; max-width: 70vw; height: auto; display: block; }
+  .cat .shirt { fill: var(--shirt); transition: fill .7s ease; }
+  .cat .scarf { fill: var(--accent); transition: fill .7s ease .2s; }
+  .cat.hop { animation: hop .7s ease; }
+  @keyframes hop { 0% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-18px) rotate(-6deg); }
+    60% { transform: translateY(0) rotate(4deg); } 100% { transform: none; } }
+  .cat .eye { animation: blink 4s infinite; transform-origin: center; transform-box: fill-box; }
+  @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+  .ball { animation: glow 2.4s ease-in-out infinite; }
+  @keyframes glow { 50% { opacity: .75; } }
+
+  .bubble { position: relative; background: #fff; border-radius: 18px; padding: 12px 14px; margin: 8px 0 4px;
+    font-family: "Mali", cursive; font-size: 18px; box-shadow: 0 4px 0 #0002; }
+  .bubble::before { content: ""; position: absolute; top: -10px; left: 50%; margin-left: -10px;
+    border: 10px solid transparent; border-top: 0; border-bottom-color: #fff; }
+
+  .seg { display: grid; grid-template-columns: 1fr 1fr; background: #ffffff1f; border-radius: 14px; padding: 4px; gap: 4px; }
+  .seg button { min-height: 46px; border: 0; border-radius: 10px; background: transparent; color: #fff; font: 700 17px "Mali"; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: #fff; color: var(--ink); }
+  .date-line { color: #e9defc; text-align: center; font-size: 15px; margin: 6px 0 0; }
+
+  .swatch-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px dashed #d9cfee; }
+  .swatch-row:last-child { border-bottom: 0; }
+  .swatch { flex: none; width: 52px; height: 52px; border-radius: 14px; border: 3px solid #0001; position: relative; }
+  .swatch.no::after { content: ""; position: absolute; left: -4px; right: -4px; top: 50%; height: 4px; background: #d32f2f;
+    transform: rotate(-35deg); border-radius: 2px; }
+  .swatch-row .lbl { font-size: 14px; color: var(--muted); }
+  .swatch-row .val { font: 700 20px "Mali"; line-height: 1.3; }
+  .swatch-row .why { font-size: 14px; color: var(--muted); line-height: 1.4; }
+  .note { background: #fff3cd; border-radius: 12px; padding: 10px 12px; font-size: 15px; margin-top: 8px; }
+  details { margin-top: 10px; font-size: 15px; color: var(--muted); }
+  summary { cursor: pointer; font-weight: 600; color: var(--ink); padding: 6px 0; }
+  .taksa { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 8px; }
+  .taksa div { background: #f3edff; border-radius: 10px; padding: 6px 4px; text-align: center; font-size: 13px; line-height: 1.3; }
+  .taksa div.hl { outline: 3px solid var(--gold); }
+  .taksa i { display: block; width: 16px; height: 16px; border-radius: 50%; margin: 2px auto; border: 1px solid #0002; }
+
+  footer { color: #cfc2ec; font-size: 13px; text-align: center; margin-top: 18px; line-height: 1.6; }
+  footer a { color: #ffe08a; }
+  .disclaimer { display: inline-block; background: #ffffff1f; color: #fff; border-radius: 999px; padding: 4px 12px; font-size: 14px; margin-bottom: 6px; }
+  .toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%) translateY(20px);
+    background: #222; color: #fff; padding: 12px 18px; border-radius: 999px; font-size: 16px; opacity: 0; transition: .25s; z-index: 5;
+    pointer-events: none; max-width: calc(100vw - 32px); }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  @media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <button class="brand" id="brandBtn" aria-label="กลับหน้าแรก">🐱 เสื้อสีไรดีเหมียว</button>
+    <div class="today-chip" id="todayChip"></div>
+  </header>
+
+  <!-- SCREEN: HOME -->
+  <section class="screen active" id="s-home">
+    <div class="stage"><svg class="cat" id="catHome" viewBox="0 0 200 230" aria-hidden="true"></svg></div>
+    <h1>เสื้อสีไรดีเหมียว</h1>
+    <p class="sub">แมวหมอดูเปิดตำราทักษา บอกสีเสื้อมงคลประจำวันให้คุณ</p>
+    <button class="btn btn-main" id="startBtn">🔮 เริ่มดูดวง</button>
+    <div class="rules">
+      <b>กติกาของเหมียว</b>
+      <ul>
+        <li>ผลขึ้นกับ <b>วันเกิด</b> + <b>วันที่จะใส่</b> + <b>เรื่องที่อยากเสริม</b></li>
+        <li>วันเดียวกันได้ผล <b>เหมือนเดิมตลอดวัน</b> กดกี่ครั้งก็ไม่เปลี่ยน (ตัดวันตอนเที่ยงคืนเวลาไทย)</li>
+        <li>ดูล่วงหน้าของ <b>พรุ่งนี้</b> ได้ จะได้เตรียมเสื้อตั้งแต่คืนนี้</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SCREEN: BIRTH DAY -->
+  <section class="screen" id="s-birth">
+    <div class="card">
+      <h2>1. คุณเกิดวันอะไรเหมียว?</h2>
+      <p class="hint">เกิดวันพุธหลัง 18:00 น. ให้เลือก “พุธกลางคืน”</p>
+      <div class="grid" id="birthGrid"></div>
+    </div>
+    <button class="btn btn-ghost" data-go="home">← กลับหน้าแรก</button>
+  </section>
+
+  <!-- SCREEN: TOPIC -->
+  <section class="screen" id="s-topic">
+    <div class="born-chip"><span id="bornLabel"></span><button class="link" data-go="birth">เปลี่ยนวันเกิด</button></div>
+    <div class="card">
+      <h2>2. อยากเสริมเรื่องอะไร?</h2>
+      <p class="hint">เลือก 1 เรื่อง เดี๋ยวเหมียวเปิดตำราให้</p>
+      <div class="grid" id="topicGrid"></div>
+    </div>
+    <button class="btn btn-ghost" data-go="home">← กลับหน้าแรก</button>
+  </section>
+
+  <!-- SCREEN: RESULT -->
+  <section class="screen" id="s-result">
+    <div class="seg" role="group" aria-label="เลือกวันที่จะใส่">
+      <button id="dayToday" aria-pressed="true">วันนี้</button>
+      <button id="dayTomorrow" aria-pressed="false">พรุ่งนี้</button>
+    </div>
+    <p class="date-line" id="dateLine"></p>
+    <div class="stage"><svg class="cat" id="catResult" viewBox="0 0 200 230" aria-hidden="true"></svg></div>
+    <div class="bubble" id="quote"></div>
+    <div class="card" id="resultCard"></div>
+    <button class="btn btn-main" id="copyBtn">📋 คัดลอกคำทำนาย</button>
+    <div class="row">
+      <button class="btn btn-soft" data-go="topic">🔁 เรื่องอื่น</button>
+      <button class="btn btn-soft" data-go="home">🏠 หน้าแรก</button>
+    </div>
+  </section>
+
+  <footer>
+    <span class="disclaimer">⚠️ เพื่อความบันเทิงเท่านั้น</span><br>
+    คำนวณจากหลักทักษาปกรณ์: ลำดับดาว อาทิตย์→จันทร์→อังคาร→พุธ→เสาร์→พฤหัสบดี→ราหู→ศุกร์
+    (<a href="https://www.silpa-mag.com/?p=150762" target="_blank" rel="noopener">ศิลปวัฒนธรรม</a>)
+    · ภูมิทักษา บริวาร/อายุ/เดช/ศรี/มูละ/อุตสาหะ/มนตรี/กาลกิณี
+    (<a href="https://www.gotoknow.org/posts/386870" target="_blank" rel="noopener">GotoKnow</a>)
+    · สีราหู (ดำ/เทา) ตามความเชื่อที่นิยมทั่วไป<br>
+    คำทำนายสไตล์ขำ ๆ เขียนโดย AI · ไม่เก็บข้อมูลใด ๆ นอกเครื่องคุณ
+  </footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// LOGIC-START
+const PLANETS = {
+  sun:  { day: 'อาทิตย์',     color: 'แดง',       hex: '#E53935' },
+  mon:  { day: 'จันทร์',      color: 'เหลือง',     hex: '#FDD835' },
+  tue:  { day: 'อังคาร',      color: 'ชมพู',       hex: '#F48FB1' },
+  wed:  { day: 'พุธ',         color: 'เขียว',      hex: '#43A047' },
+  thu:  { day: 'พฤหัสบดี',    color: 'ส้ม',        hex: '#FB8C00' },
+  fri:  { day: 'ศุกร์',        color: 'ฟ้า',        hex: '#4FC3F7' },
+  sat:  { day: 'เสาร์',        color: 'ม่วง',       hex: '#8E24AA' },
+  rahu: { day: 'พุธกลางคืน',  color: 'ดำ/เทาเข้ม', hex: '#455A64' },
+};
+// Taksa ring order (ทักษาปกรณ์): 1 อาทิตย์, 2 จันทร์, 3 อังคาร, 4 พุธ, 7 เสาร์, 5 พฤหัสบดี, 8 ราหู, 6 ศุกร์
+const RING = ['sun', 'mon', 'tue', 'wed', 'sat', 'thu', 'rahu', 'fri'];
+const ROLES = ['บริวาร', 'อายุ', 'เดช', 'ศรี', 'มูละ', 'อุตสาหะ', 'มนตรี', 'กาลกิณี'];
+const BIRTH_ORDER = ['sun', 'mon', 'tue', 'wed', 'rahu', 'thu', 'fri', 'sat'];
+const WEEKDAY = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+const TOPICS = {
+  work:   { label: 'การงาน',        emoji: '💼', role: 'เดช',   desc: 'อำนาจ บารมี งานเดิน' },
+  money:  { label: 'การเงิน',        emoji: '💰', role: 'ศรี',   desc: 'โชคลาภ เงินทอง' },
+  health: { label: 'สุขภาพ',        emoji: '🌿', role: 'อายุ',  desc: 'แข็งแรง สดชื่น' },
+  patron: { label: 'ผู้ใหญ่เมตตา',   emoji: '🤝', role: 'มนตรี', desc: 'มีคนอุปถัมภ์ ช่วยเหลือ' },
+  charm:  { label: 'เสน่ห์ คนรอบข้าง', emoji: '💖', role: 'บริวาร', desc: 'คนรัก เพื่อนฝูง ลูกน้อง' },
+};
+
+const QUOTES = {
+  work: [
+    'ใส่สี{c}ไปทำงาน หัวหน้าเห็นแล้วจะลืมว่าเมื่อวานคุณส่งงานช้า เหมียว~',
+    'สี{c}วันนี้ = โหมดบอส ประชุมกี่นัดก็รอด (แต่อย่าหลับในประชุมนะ)',
+    'งานจะเดินเร็วเหมือนแมวได้ยินเสียงแกะซองขนม ถ้าใส่สี{c}',
+    'ใส่สี{c} แล้วพิมพ์ “รับทราบครับ/ค่ะ” อย่างมั่นใจ จักรวาลจะเข้าข้างคุณ',
+    'เดชแรงมาก! สี{c}ทำให้ทุกคนฟังคุณ ยกเว้นแมวที่บ้าน เพราะแมวไม่ฟังใคร',
+  ],
+  money: [
+    'สี{c}เรียกทรัพย์! แต่ถ้ากดสั่งของออนไลน์ เงินก็จะวิ่งออกเร็วเท่ากันนะเหมียว',
+    'ใส่สี{c} อาจเจอแบงก์ร้อยในกระเป๋ากางเกงตัวเก่า (ผลลัพธ์ไม่รับประกัน)',
+    'เงินจะไหลมาเทมา… เหมือนขนแมวบนโซฟา ถ้าใส่สี{c}',
+    'สี{c}วันนี้ ทำให้กระเป๋าตังค์ยิ้มได้ แต่ขอแบ่งค่าขนมแมวด้วยนะ',
+    'ศรีมาเต็ม! ใส่สี{c} แล้วอย่าลืมเช็กว่าโอนเงินเข้าแล้วหรือยัง',
+  ],
+  health: [
+    'สี{c}ช่วยให้สดชื่นเหมือนแมวตื่นนอนรอบที่ 12 ของวัน',
+    'ใส่สี{c} แล้วดื่มน้ำเยอะ ๆ นอนให้พอ (อันหลังสำคัญกว่าสีเสื้อนะเหมียว)',
+    'พลังชีวิตเต็มหลอด! สี{c}ทำให้ขึ้นบันไดได้โดยไม่หอบ… อาจจะ',
+    'สี{c}วันนี้เสริมอายุ แต่ชาไข่มุกหวาน 200% ยังไงก็หักคะแนนนะ',
+    'ใส่สี{c} แล้วยืดเส้นยืดสายแบบแมว ร่างกายจะขอบคุณคุณ',
+  ],
+  patron: [
+    'สี{c}ทำให้ผู้ใหญ่เอ็นดู เหมือนเวลาแมวทำตาแป๋วขอขนม',
+    'ใส่สี{c} วันนี้อาจมีคนเลี้ยงข้าว หรืออย่างน้อยก็เลี้ยงกาแฟ เหมียว',
+    'ผู้ใหญ่ใจดีจะโผล่มาช่วยตอนคับขัน ถ้าใส่สี{c} (อย่าลืมไหว้ขอบคุณ)',
+    'สี{c}เรียกมนตรี! ขอลา ขอเบิก ขออนุมัติ วันนี้มีลุ้น',
+    'ใส่สี{c} แล้วพูดเพราะ ๆ ผู้ใหญ่จะเมตตาแบบรีบเซ็นให้เลย',
+  ],
+  charm: [
+    'สี{c}วันนี้เสน่ห์แรงกว่าแมวส้มนอนหงายท้อง ใครเห็นก็ใจละลาย',
+    'ใส่สี{c} แชทที่เงียบมาสามวันอาจเด้งขึ้นมา… หรือเป็นแค่โปรโมชันก็ได้',
+    'เพื่อนจะรักคุณมากขึ้น 37% ถ้าใส่สี{c} (และเลี้ยงขนมด้วย)',
+    'สี{c}ทำให้ลูกน้องเชื่อฟัง เพื่อนร่วมงานช่วยงาน ส่วนแมวยังเหมือนเดิม',
+    'เสน่ห์ระดับคนดังเดินพรมแดง แค่ใส่สี{c} แล้วยิ้มเยอะ ๆ เหมียว',
+  ],
+};
+
+// Map each role to the planet sitting there, starting with the given planet as บริวาร.
+function taksa(planet) {
+  const start = RING.indexOf(planet);
+  const map = {};
+  ROLES.forEach((role, i) => { map[role] = RING[(start + i) % RING.length]; });
+  return map;
+}
+function roleOf(map, planet) {
+  return ROLES.find(r => map[r] === planet);
+}
+
+function hashStr(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+
+// Deterministic result for (birth planet, topic, wearing-day planet, date key).
+function computeFortune(birth, topicKey, wear, dateKey) {
+  const topic = TOPICS[topicKey];
+  const B = taksa(birth);
+  const W = taksa(wear);
+  const role = topic.role;
+  const bKala = B['กาลกิณี'];
+  const wKala = W['กาลกิณี'];
+  const bad = p => p === bKala || p === wKala;
+  // Fallback order when today's colour for this role is unusable.
+  const todayPicks = [W[role], W['เดช'], W['ศรี'], W['มนตรี'], W['บริวาร'], W['อายุ']];
+
+  let main = B[role];
+  let swapped = null;
+  if (bad(main)) {
+    swapped = main;
+    main = todayPicks.find(p => !bad(p));
+  }
+  const accent = todayPicks.find(p => !bad(p) && p !== main);
+  const avoid = [...new Set([bKala, wKala])];
+  const quotes = QUOTES[topicKey];
+  const quote = quotes[hashStr(`${dateKey}|${birth}|${topicKey}`) % quotes.length]
+    .replaceAll('{c}', PLANETS[main].color);
+
+  return {
+    birth, wear, topicKey, role, main, accent, avoid, swapped, quote,
+    mainRoleInBirth: roleOf(B, main), mainRoleInWear: roleOf(W, main),
+    accentRole: roleOf(W, accent), bKala, wKala, birthMap: B,
+  };
+}
+
+// Calendar date in Asia/Bangkok, `offset` days from now.
+function bangkokDay(offset, now = Date.now()) {
+  const d = new Date(now + offset * 86400000);
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Bangkok', year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short',
+  }).formatToParts(d);
+  const get = t => parts.find(p => p.type === t).value;
+  const wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday'));
+  return { date: d, key: `${get('year')}-${get('month')}-${get('day')}`, planet: WEEKDAY[wd] };
+}
+// LOGIC-END
+
+// ---------- UI ----------
+const $ = s => document.querySelector(s);
+const state = { birth: null, topic: null, offset: 0 };
+const STORE_KEY = 'seuasee-birth';
+
+function loadBirth() {
+  try { const v = localStorage.getItem(STORE_KEY); return PLANETS[v] ? v : null; } catch { return null; }
+}
+function saveBirth(v) {
+  try { localStorage.setItem(STORE_KEY, v); } catch { /* private mode: ignore */ }
+}
+
+function thaiDate(d) {
+  return new Intl.DateTimeFormat('th-TH', {
+    timeZone: 'Asia/Bangkok', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+  }).format(d);
+}
+function birthLabel(p) { return p === 'rahu' ? 'พุธกลางคืน' : p === 'wed' ? 'พุธกลางวัน' : PLANETS[p].day; }
+
+function catSVG() {
+  return `
+  <defs><radialGradient id="g" cx=".35" cy=".35"><stop offset="0" stop-color="#e6f7ff"/><stop offset="1" stop-color="#7fb7ff"/></radialGradient></defs>
+  <ellipse cx="100" cy="222" rx="70" ry="7" fill="#0003"/>
+  <path d="M150 190 q40 -10 30 -50 q-4 -14 -14 -8 q8 24 -20 40z" fill="#f3b26b" stroke="#2a2140" stroke-width="3"/>
+  <path class="shirt" d="M52 150 q48 -26 96 0 l10 66 q-58 10 -116 0z" stroke="#2a2140" stroke-width="3"/>
+  <path d="M84 136 q16 12 32 0 l4 16 q-20 10 -40 0z" class="scarf" stroke="#2a2140" stroke-width="3"/>
+  <g>
+    <path d="M50 70 l6 -40 l30 22z" fill="#f3b26b" stroke="#2a2140" stroke-width="3"/>
+    <path d="M150 70 l-6 -40 l-30 22z" fill="#f3b26b" stroke="#2a2140" stroke-width="3"/>
+    <path d="M58 64 l3 -22 l16 12z M142 64 l-3 -22 l-16 12z" fill="#ffb3c7"/>
+    <ellipse cx="100" cy="96" rx="58" ry="50" fill="#f3b26b" stroke="#2a2140" stroke-width="3"/>
+    <path d="M78 58 q22 -6 44 0 M84 50 l4 10 M100 47 v12 M116 50 l-4 10" stroke="#d98b3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse class="eye" cx="78" cy="94" rx="8" ry="10" fill="#2a2140"/>
+    <ellipse class="eye" cx="122" cy="94" rx="8" ry="10" fill="#2a2140"/>
+    <circle cx="81" cy="90" r="3" fill="#fff"/><circle cx="125" cy="90" r="3" fill="#fff"/>
+    <path d="M95 110 l5 5 l5 -5z" fill="#ff7aa2"/>
+    <path d="M100 115 q-6 8 -13 4 M100 115 q6 8 13 4" stroke="#2a2140" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M60 108 h-22 M60 115 l-20 6 M140 108 h22 M140 115 l20 6" stroke="#2a2140" stroke-width="2" stroke-linecap="round"/>
+    <ellipse cx="66" cy="112" rx="7" ry="4" fill="#ff9fb8" opacity=".6"/><ellipse cx="134" cy="112" rx="7" ry="4" fill="#ff9fb8" opacity=".6"/>
+  </g>
+  <path d="M58 52 q42 -22 84 0 l-30 -46 q-10 -6 -18 2z" fill="#5b3fa8" stroke="#2a2140" stroke-width="3"/>
+  <path d="M54 52 q46 -16 92 0" stroke="#ffc94d" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M98 22 l3 6 l6 1 l-5 4 l1 6 l-5 -3 l-5 3 l1 -6 l-5 -4 l6 -1z" fill="#ffc94d"/>
+  <circle cx="100" cy="190" r="22" fill="url(#g)" stroke="#2a2140" stroke-width="3" class="ball"/>
+  <path d="M74 200 q-6 -14 6 -18 M126 200 q6 -14 -6 -18" stroke="#2a2140" stroke-width="3" fill="#f3b26b"/>
+  <ellipse cx="78" cy="198" rx="10" ry="8" fill="#f3b26b" stroke="#2a2140" stroke-width="3"/>
+  <ellipse cx="122" cy="198" rx="10" ry="8" fill="#f3b26b" stroke="#2a2140" stroke-width="3"/>
+  <rect x="80" y="210" width="40" height="8" rx="3" fill="#8a5a2b" stroke="#2a2140" stroke-width="2"/>`;
+}
+
+function show(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === `s-${name}`));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function go(name) {
+  if (name === 'topic' && !state.birth) name = 'birth';
+  if (name === 'topic') $('#bornLabel').textContent = `🎂 เกิดวัน${birthLabel(state.birth)}`;
+  show(name);
+}
+
+function renderBirthGrid() {
+  $('#birthGrid').innerHTML = BIRTH_ORDER.map(p => `
+    <button class="opt" data-birth="${p}">
+      <span class="dot" style="background:${PLANETS[p].hex}"></span>
+      <span>${PLANETS[p === 'rahu' ? 'wed' : p].day}${p === 'rahu' ? '<small>กลางคืน · 18:00 น. ขึ้นไป</small>' : p === 'wed' ? '<small>กลางวัน · ก่อน 18:00 น.</small>' : ''}</span>
+    </button>`).join('');
+}
+function renderTopicGrid() {
+  $('#topicGrid').innerHTML = Object.entries(TOPICS).map(([k, t], i, arr) => `
+    <button class="opt ${i === arr.length - 1 && arr.length % 2 ? 'wide' : ''}" data-topic="${k}">
+      <span class="emo">${t.emoji}</span><span>${t.label}<small>${t.desc}</small></span>
+    </button>`).join('');
+}
+
+let lastText = '';
+function renderResult() {
+  const day = bangkokDay(state.offset);
+  const r = computeFortune(state.birth, state.topic, day.planet, day.key);
+  const P = PLANETS, t = TOPICS[state.topic];
+  const wearName = P[day.planet].day;
+
+  $('#dayToday').setAttribute('aria-pressed', state.offset === 0);
+  $('#dayTomorrow').setAttribute('aria-pressed', state.offset === 1);
+  $('#dateLine').textContent = `${thaiDate(day.date)} · เสริม${t.label}`;
+
+  document.documentElement.style.setProperty('--shirt', P[r.main].hex);
+  document.documentElement.style.setProperty('--accent', P[r.accent].hex);
+  const cat = $('#catResult');
+  cat.classList.remove('hop'); void cat.getBoundingClientRect(); cat.classList.add('hop');
+  $('#quote').textContent = `“${r.quote}”`;
+
+  const mainWhy = r.swapped
+    ? `ใช้สีจากทักษาวัน${wearName}: ดาว${planetName(r.main)} อยู่ภูมิ “${r.mainRoleInWear}”`
+    : `ทักษาคนเกิดวัน${birthLabel(r.birth)}: ดาว${planetName(r.main)} อยู่ภูมิ “${r.role}”`;
+  const avoidText = r.avoid.map(p => P[p].color).join(' และ ');
+  const avoidWhy = r.avoid.map(p => {
+    const who = [];
+    if (p === r.bKala) who.push(`คนเกิดวัน${birthLabel(r.birth)}`);
+    if (p === r.wKala) who.push(`วัน${wearName}`);
+    return `สี${P[p].color} = กาลกิณีของ${who.join('และ')}`;
+  }).join(' · ');
+
+  $('#resultCard').innerHTML = `
+    <div class="swatch-row">
+      <div class="swatch" style="background:${P[r.main].hex}"></div>
+      <div><div class="lbl">👕 สีเสื้อหลัก</div><div class="val">สี${P[r.main].color}</div><div class="why">${mainWhy}</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch" style="background:${P[r.accent].hex}"></div>
+      <div><div class="lbl">✨ สีเสริม (กระเป๋า ผ้าพันคอ เคสมือถือ)</div><div class="val">สี${P[r.accent].color}</div>
+      <div class="why">ทักษาวัน${wearName}: ดาว${planetName(r.accent)} อยู่ภูมิ “${r.accentRole}”</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch no" style="background:${P[r.avoid[0]].hex}"></div>
+      <div><div class="lbl">🚫 เลี่ยงสี</div><div class="val">สี${avoidText}</div><div class="why">${avoidWhy}</div></div>
+    </div>
+    ${r.swapped ? `<div class="note">🙀 ตามทักษาวันเกิด สีที่ได้คือสี${P[r.swapped].color} แต่สีนี้เป็นกาลกิณีของวัน${wearName} เหมียวเลยเปลี่ยนให้</div>` : ''}
+    <details>
+      <summary>🔍 ดูตารางทักษาของคุณ</summary>
+      ดาวประจำวันเกิดอยู่ภูมิ “บริวาร” แล้วนับเวียนไปตามลำดับดาว
+      <div class="taksa">${ROLES.map(role => {
+        const p = r.birthMap[role];
+        return `<div class="${role === r.role ? 'hl' : ''}"><b>${role}</b><i style="background:${P[p].hex}"></i>${planetName(p)}</div>`;
+      }).join('')}</div>
+    </details>`;
+
+  const url = location.href.split('#')[0].split('?')[0];
+  lastText = [
+    `🐱 เสื้อสีไรดีเหมียว — ${thaiDate(day.date)}`,
+    `เกิดวัน${birthLabel(r.birth)} · อยากเสริม${t.label}`,
+    `👕 สีเสื้อหลัก: ${P[r.main].color}`,
+    `✨ สีเสริม: ${P[r.accent].color}`,
+    `🚫 เลี่ยง: ${avoidText}`,
+    `“${r.quote}”`,
+    `(เพื่อความบันเทิง) ${url}`,
+  ].join('\n');
+}
+function planetName(p) { return p === 'rahu' ? 'ราหู' : PLANETS[p].day; }
+
+function toast(msg) {
+  const el = $('#toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('show'), 1800);
+}
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; } catch { /* fall back below */ }
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  let ok = false; try { ok = document.execCommand('copy'); } catch { ok = false; }
+  ta.remove(); return ok;
+}
+
+function init() {
+  $('#catHome').innerHTML = catSVG();
+  $('#catResult').innerHTML = catSVG().replace('id="g"', 'id="g2"').replace('url(#g)', 'url(#g2)');
+  const today = bangkokDay(0);
+  $('#todayChip').innerHTML = `วันนี้<br>${thaiDate(today.date).replace(/^วัน/, '')}`;
+  renderBirthGrid(); renderTopicGrid();
+  state.birth = loadBirth();
+
+  document.addEventListener('click', e => {
+    const g = e.target.closest('[data-go]');
+    if (g) return go(g.dataset.go);
+    const b = e.target.closest('[data-birth]');
+    if (b) { state.birth = b.dataset.birth; saveBirth(state.birth); return go('topic'); }
+    const t = e.target.closest('[data-topic]');
+    if (t) { state.topic = t.dataset.topic; state.offset = 0; renderResult(); return show('result'); }
+  });
+  $('#brandBtn').onclick = () => go('home');
+  $('#startBtn').onclick = () => go(state.birth ? 'topic' : 'birth');
+  $('#dayToday').onclick = () => { state.offset = 0; renderResult(); };
+  $('#dayTomorrow').onclick = () => { state.offset = 1; renderResult(); };
+  $('#copyBtn').onclick = async () => toast(await copyText(lastText) ? 'คัดลอกแล้ว ไปแปะใน LINE ได้เลยเหมียว 🐾' : 'คัดลอกไม่สำเร็จ ลองกดค้างที่ข้อความแทนนะ');
+}
+init();
+</script>
+</body>
+</html>
